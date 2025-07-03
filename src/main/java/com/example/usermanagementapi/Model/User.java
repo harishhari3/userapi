@@ -4,19 +4,24 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity@Table(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    @NotBlank(message = "name is required")
+    private String name;
+
+    @NotBlank(message = "email is required")
+    @Email(message = "email should be valid")
+    private String email;
+
+    // Constructors
+    public User() {
+        // Default constructor
     }
 
     public User(long id, String name, String email) {
@@ -25,6 +30,7 @@ public class User {
         this.email = email;
     }
 
+    // Getters and Setters
     public long getId() {
         return id;
     }
@@ -49,10 +55,13 @@ public class User {
         this.email = email;
     }
 
-    @NotBlank(message = "name is required")
-    private String name;
-
-    @NotBlank(message = "email is required")
-    @Email(message = "email should be valid")
-    private String email;
+    // toString()
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
