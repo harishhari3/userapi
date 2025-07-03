@@ -4,6 +4,8 @@ import com.example.usermanagementapi.Model.User;
 import com.example.usermanagementapi.Repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,10 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         return user.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/page")
+    public Page<User> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 
     // ✅ Update user
     @PutMapping("/{id}")
@@ -54,6 +60,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
+
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
